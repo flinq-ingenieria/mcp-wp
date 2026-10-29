@@ -1,0 +1,115 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/mcpb/main/schemas/mcpb-manifest-v0.4.schema.json",
+  "manifest_version": "0.4",
+  "name": "mcp-wp",
+  "display_name": "WordPress",
+  "version": "0.2.1",
+  "description": "Manage a WordPress site from Claude: content, taxonomies, media, users, comments and plugins.",
+  "long_description": "Connects Claude Desktop to a WordPress site through the REST API with an Application Password. Create, edit and find posts, pages and custom post types (including targeted partial edits and URL lookup), manage categories, tags and custom taxonomies, media, users, comments and plugins, and search the WordPress.org plugin directory. WordPress 5.6+ is needed for Application Passwords.",
+  "author": {
+    "name": "InstaWP",
+    "url": "https://instawp.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flinq-ingenieria/mcp-wp.git"
+  },
+  "homepage": "https://github.com/flinq-ingenieria/mcp-wp",
+  "documentation": "https://github.com/flinq-ingenieria/mcp-wp#readme",
+  "support": "https://github.com/flinq-ingenieria/mcp-wp/issues",
+  "license": "GPL-3.0-or-later",
+  "keywords": ["wordpress", "cms", "content", "mcp"],
+  "server": {
+    "type": "node",
+    "entry_point": "build/server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/build/server.js"],
+      "env": {
+        "WORDPRESS_API_URL": "${user_config.wordpress_url}",
+        "WORDPRESS_USERNAME": "${user_config.wordpress_username}",
+        "WORDPRESS_PASSWORD": "${user_config.wordpress_app_password}",
+        "WORDPRESS_LOG_LEVEL": "${user_config.log_level}"
+      }
+    }
+  },
+  "user_config": {
+    "wordpress_url": {
+      "type": "string",
+      "title": "WordPress URL",
+      "description": "Address of the site, e.g. https://www.example.com (the REST API path is added automatically).",
+      "required": true
+    },
+    "wordpress_username": {
+      "type": "string",
+      "title": "Username",
+      "description": "WordPress user that owns the Application Password.",
+      "required": true
+    },
+    "wordpress_app_password": {
+      "type": "string",
+      "title": "Application Password",
+      "description": "Users → Profile → Application Passwords in the WordPress admin. Not your login password.",
+      "sensitive": true,
+      "required": true
+    },
+    "log_level": {
+      "type": "string",
+      "title": "Log level",
+      "description": "Logs go to the Claude Desktop MCP log: error, info or debug.",
+      "default": "error"
+    }
+  },
+  "tools": [
+    {"name": "list_content", "description": "Lists content of any type (posts, pages, or custom post types) with filtering and pagination"},
+    {"name": "get_content", "description": "Gets specific content by ID and content type"},
+    {"name": "create_content", "description": "Creates new content of any type"},
+    {"name": "update_content", "description": "Updates existing content of any type"},
+    {"name": "delete_content", "description": "Deletes content of any type"},
+    {"name": "discover_content_types", "description": "Discovers all available content types (built-in and custom) in the WordPress site"},
+    {"name": "find_content_by_url", "description": "Finds content by its URL, automatically detecting the content type, and optionally updates it"},
+    {"name": "get_content_by_slug", "description": "Searches for content by slug across one or more content types"},
+    {"name": "discover_taxonomies", "description": "Discovers all available taxonomies (built-in and custom) in the WordPress site, including each taxonomy's rest_base"},
+    {"name": "list_terms", "description": "Lists terms in any taxonomy (categories, tags, or custom taxonomies) with filtering and pagination"},
+    {"name": "get_term", "description": "Gets a specific term by ID from any taxonomy"},
+    {"name": "create_term", "description": "Creates a new term in any taxonomy"},
+    {"name": "update_term", "description": "Updates an existing term in any taxonomy"},
+    {"name": "delete_term", "description": "Deletes a term from any taxonomy"},
+    {"name": "assign_terms_to_content", "description": "Assigns taxonomy terms to content of any type."},
+    {"name": "get_content_terms", "description": "Gets all taxonomy terms assigned to content of any type"},
+    {"name": "list_plugins", "description": "Lists all plugins with filtering options"},
+    {"name": "get_plugin", "description": "Retrieves plugin details"},
+    {"name": "activate_plugin", "description": "Activates a plugin"},
+    {"name": "deactivate_plugin", "description": "Deactivates a plugin"},
+    {"name": "create_plugin", "description": "Creates a plugin from the WordPress.org repository"},
+    {"name": "list_media", "description": "Lists media items with filtering and pagination options"},
+    {"name": "get_media", "description": "Gets a media item by ID"},
+    {"name": "create_media", "description": "Creates a new media item from a URL or local file path"},
+    {"name": "update_media", "description": "Updates an existing media item"},
+    {"name": "edit_media", "description": "Legacy alias for update_media"},
+    {"name": "delete_media", "description": "Deletes a media item"},
+    {"name": "list_users", "description": "Lists all users with filtering, sorting, and pagination options"},
+    {"name": "get_user", "description": "Gets a user by ID"},
+    {"name": "create_user", "description": "Creates a new user"},
+    {"name": "update_user", "description": "Updates an existing user"},
+    {"name": "delete_user", "description": "Deletes a user"},
+    {"name": "search_plugin_repository", "description": "Search for plugins in the WordPress.org plugin repository"},
+    {"name": "get_plugin_details", "description": "Get detailed information about a plugin from the WordPress.org repository"},
+    {"name": "list_comments", "description": "Lists comments with filtering, sorting, and pagination options"},
+    {"name": "get_comment", "description": "Gets a comment by ID"},
+    {"name": "create_comment", "description": "Creates a new comment"},
+    {"name": "update_comment", "description": "Updates an existing comment"},
+    {"name": "delete_comment", "description": "Deletes a comment"},
+    {"name": "execute_sql_query", "description": "Execute a read-only SQL query against the WordPress database."},
+    {"name": "list_sites", "description": "List all configured WordPress sites."},
+    {"name": "get_site", "description": "Get details about a specific WordPress site configuration."},
+    {"name": "test_site", "description": "Test the connection to a specific WordPress site."},
+    {"name": "get_content_summary", "description": "Returns a minimal summary of a single piece of content — id, title, slug, status, link, excerpt, modified date, taxonomy IDs, featured media, word count, and Yoast SEO fields."}
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "linux", "win32"],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
+}

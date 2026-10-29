@@ -21,6 +21,7 @@
   },
   "scripts": {
     "build": "tsc --project tsconfig.json",
+    "build:mcpb": "node scripts/build-mcpb.mjs",
     "start": "node ./build/server.js",
     "dev": "tsx watch src/server.ts",
     "clean": "rimraf build",

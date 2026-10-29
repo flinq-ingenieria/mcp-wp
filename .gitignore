@@ -5,3 +5,4 @@ logs
 *.code-workspace
 .claude/
 .mcp.json
+dist/
